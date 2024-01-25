@@ -1,0 +1,21 @@
+{
+  "name": "user",
+  "version": "1.0.0",
+  "description": "Microservice Users",
+  "scripts": {
+    "dev": "serverless offline",
+    "deploy": "serverless deploy"
+  },
+  "keywords": [],
+  "author": "pablo.perdomo@finturu.com",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1531.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.19.11",
+    "serverless-esbuild": "^1.50.1",
+    "serverless-offline": "^13.3.2"
+  }
+}

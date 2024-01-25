@@ -1,0 +1,198 @@
+service: user
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+        - cognito-idp:*
+      Resource:
+        - arn:aws:dynamodb:us-east-2:943766074476:table/usersTable
+        - arn:aws:dynamodb:us-east-2:943766074476:table/documentTypesTable
+        - arn:aws:dynamodb:us-east-2:943766074476:table/personUsersTable
+        - arn:aws:dynamodb:us-east-2:943766074476:table/companyUsersTable
+        - arn:aws:dynamodb:us-east-2:943766074476:table/userTypesTable
+        - arn:aws:dynamodb:us-east-2:943766074476:table/usersInCompanyTable
+        - arn:aws:dynamodb:us-east-2:943766074476:table/companyTypesTable
+        - arn:aws:cognito-idp:us-east-2:943766074476:userpool/*
+
+functions:
+  userCreate:
+    handler: src/userCreate.userCreate
+    events:
+      - httpApi:
+          path: /user/create
+          method: post
+  userDelete:
+    handler: src/userDelete.userDelete
+    events:
+      - httpApi:
+          path: /user/delete
+          method: post
+  userLogin:
+    handler: src/userLogin.userLogin
+    events:
+      - httpApi:
+          path: /user/login
+          method: post
+  userForgotPassword:
+    handler: src/userForgotPassword.userForgotPassword
+    events:
+      - httpApi:
+          path: /user/forgot-password
+          method: post
+  userSavePassword:
+    handler: src/userSavePassword.userSavePassword
+    events:
+      - httpApi:
+          path: /user/save-password
+          method: post
+  documentTypeCreate:
+    handler: src/documentTypeCreate.documentTypeCreate
+    events:
+      - httpApi:
+          path: /document-type/create
+          method: post
+  documentTypeDelete:
+    handler: src/documentTypeDelete.documentTypeDelete
+    events:
+      - httpApi:
+          path: /document-type/delete
+          method: post
+  documentTypeList:
+    handler: src/documentTypeList.documentTypeList
+    events:
+      - httpApi:
+          path: /document-type/list
+          method: post
+  personUserCreate:
+    handler: src/personUserCreate.personUserCreate
+    events:
+      - httpApi:
+          path: /person-user/create
+          method: post
+  userTypeCreate:
+    handler: src/userTypeCreate.userTypeCreate
+    events:
+      - httpApi:
+          path: /user-type/create
+          method: post
+  companyUserCreate:
+    handler: src/companyUserCreate.companyUserCreate
+    events:
+      - httpApi:
+          path: /company-user/create
+          method: post
+  userInCompanyCreate:
+    handler: src/userInCompanyCreate.userInCompanyCreate
+    events:
+      - httpApi:
+          path: /user-in-company/create
+          method: post
+  companyTypeCreate:
+    handler: src/companyTypeCreate.companyTypeCreate
+    events:
+      - httpApi:
+          path: /company-type/create
+          method: post
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: idUser
+            AttributeType: S
+        KeySchema:
+          - AttributeName: idUser
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    documentTypesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: documentTypesTable
+        AttributeDefinitions:
+          - AttributeName: idDocumentType
+            AttributeType: S
+        KeySchema:
+          - AttributeName: idDocumentType
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    personUsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: personUsersTable
+        AttributeDefinitions:
+          - AttributeName: idUser
+            AttributeType: S
+        KeySchema:
+          - AttributeName: idUser
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    userTypesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: userTypesTable
+        AttributeDefinitions:
+          - AttributeName: idUserType
+            AttributeType: S
+        KeySchema:
+          - AttributeName: idUserType
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    companyUsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: companyUsersTable
+        AttributeDefinitions:
+          - AttributeName: idCompanyUser
+            AttributeType: S
+        KeySchema:
+          - AttributeName: idCompanyUser
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    usersInCompanyTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersInCompanyTable
+        AttributeDefinitions:
+          - AttributeName: idUser
+            AttributeType: S
+        KeySchema:
+          - AttributeName: idUser
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    companyTypesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: companyTypesTable
+        AttributeDefinitions:
+          - AttributeName: idCompanyType
+            AttributeType: S
+        KeySchema:
+          - AttributeName: idCompanyType
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+plugins:
+  - serverless-offline
